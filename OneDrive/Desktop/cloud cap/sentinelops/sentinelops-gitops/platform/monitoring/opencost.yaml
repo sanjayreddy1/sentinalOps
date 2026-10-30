@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencost
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opencost
+  template:
+    metadata:
+      labels:
+        app: opencost
+    spec:
+      containers:
+        - name: opencost
+          image: ghcr.io/opencost/opencost:1.11.0
+          args:
+            - "--feature-flag=standard"
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

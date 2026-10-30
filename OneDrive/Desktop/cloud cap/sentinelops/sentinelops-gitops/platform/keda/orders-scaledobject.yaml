@@ -1,0 +1,23 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: orders
+  namespace: sentinelops
+spec:
+  scaleTargetRef:
+    name: orders
+    kind: Deployment
+  minReplicaCount: 1
+  maxReplicaCount: 3
+  cooldownPeriod: 60
+  scalingPeriod: 15
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-operated.monitoring.svc:9090
+        metricName: orders_replicas_desired
+        namespace: sentinelops
+        dimensionName: kedaScalingTarget
+        dimensionValue: orders
+        value: "1"
+        minimum: "1"

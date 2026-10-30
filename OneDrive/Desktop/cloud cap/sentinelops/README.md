@@ -46,10 +46,12 @@ sentinelops/
 - [x] Final artifacts authored: DEMO_SCRIPT.md, RESUME_BULLETS.md, load/k6-traffic.js + K6_RUNBOOK.md
 - [x] Fullstack rebuild: console frontend (React 19 + Vite 6 + Tailwind 4 design system from `build-docs/global(1).css`), demo shop frontend, CORS + API proxy wiring
 - [x] `npm run build` passes for console frontend and demo shop frontend
+- [x] Week 5-6: ServiceMonitors for orders/catalog/api-gateway/payments, KEDA ScaledObject (orders), HPA (orders)
+- [x] Week 7: OpenCost deployment, Falco platform, Chaos Mesh experiments, remediation webhook + load tests in place
 
 ## Remaining
 
-- [ ] Runtime wiring: Prometheus metrics adapters (ServiceMonitor), OpenCost/Goldilocks deployment, Istio VirtualServices, full Keycloak realm/OIDC client config
+- [ ] Runtime wiring: Istio VirtualServices, full Keycloak realm/OIDC client config (Goldilocks recommendations tooling)
 - [ ] Live execution: cluster bootstrap (`make up`), CI/CD run, chaos runs, k6 cost comparison, demo video, blog post
 
 ## Week 1 — first end-to-end slice

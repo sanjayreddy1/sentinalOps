@@ -1,0 +1,67 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sentinelops-orders
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: orders
+  namespaceSelector:
+    names:
+      - sentinelops
+  endpoints:
+    - port: 8080
+      path: /metrics
+      interval: 30s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sentinelops-catalog
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: catalog
+  namespaceSelector:
+    names:
+      - sentinelops
+  endpoints:
+    - port: 8000
+      path: /metrics
+      interval: 30s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sentinelops-api-gateway
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway
+  namespaceSelector:
+    names:
+      - sentinelops
+  endpoints:
+    - port: 8080
+      path: /metrics
+      interval: 30s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sentinelops-payments
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: payments
+  namespaceSelector:
+    names:
+      - sentinelops
+  endpoints:
+    - port: 8080
+      path: /metrics
+      interval: 30s
