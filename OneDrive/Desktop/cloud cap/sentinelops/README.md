@@ -49,6 +49,7 @@ sentinelops/
 - [x] Week 5-6: ServiceMonitors for orders/catalog/api-gateway/payments, KEDA ScaledObject (orders), HPA (orders)
 - [x] Week 7: OpenCost deployment, Falco platform, Chaos Mesh experiments, remediation webhook + load tests in place
 - [x] Keycloak realm + OIDC client config, Grafana SentinelOps dashboard (Week 8-9 prep)
+- [x] Testing phase started: Vitest + Testing Library + jsdom, `Overview` screen test green (`npm run test`)
 
 ## Remaining
 
