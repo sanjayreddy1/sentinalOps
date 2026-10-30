@@ -24,7 +24,7 @@ sentinelops/
 | 5. Implementation details | infra/app/gitops/console | in progress / scaffolded |
 | 6. Console screens | sentinelops-console | done (Screens 1-8 built, styled via `build-docs/global(1).css`) |
 | 7. Week-by-week plan | cross-repo | planned |
-| 8. Testing + metrics | - | pending |
+| 8. Testing + metrics | console/frontend | in progress (Vitest green) |
 | 9. Demo script | - | pending |
 | 10. Risks | cross-repo | documented |
 
@@ -50,10 +50,12 @@ sentinelops/
 - [x] Week 7: OpenCost deployment, Falco platform, Chaos Mesh experiments, remediation webhook + load tests in place
 - [x] Keycloak realm + OIDC client config, Grafana SentinelOps dashboard (Week 8-9 prep)
 - [x] Testing phase started: Vitest + Testing Library + jsdom, `Overview` screen test green (`npm run test`)
+- [x] Supabase wired as database (client + `.env` + `src/utils/supabase.ts`, Overview/Login queries), Create User form with roles (admin/developer/viewer) via Supabase Auth, password visibility toggle added
 
 ## Remaining
 
 - [ ] Runtime wiring: Istio VirtualServices, full Keycloak realm/OIDC client config (Goldilocks recommendations tooling)
+- [ ] Testing phase continuation: backend pytest suite (FastAPI console API), Playwright E2E for console screens
 - [ ] Live execution: cluster bootstrap (`make up`), CI/CD run, chaos runs, k6 cost comparison, demo video, blog post
 
 ## Week 1 — first end-to-end slice
