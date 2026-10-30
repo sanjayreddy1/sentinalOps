@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { supabase } from "../utils/supabase";
 import {
   CartesianGrid,
   Line,
@@ -12,7 +13,10 @@ import {
 export default function Overview() {
   const { data } = useQuery({
     queryKey: ["overview"],
-    queryFn: async () => (await fetch("/api/overview")).json(),
+    queryFn: async () => {
+      const { data: rows } = await supabase.from("overview").select("*");
+      return rows?.[0] ?? null;
+    },
   });
 
   const stats = [
