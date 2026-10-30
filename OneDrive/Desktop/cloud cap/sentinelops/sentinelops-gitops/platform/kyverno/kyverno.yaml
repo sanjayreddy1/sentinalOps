@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: kyverno
+spec:
+  project: default
+  source:
+    repoURL: https://kyverno.github.io/charts
+    chart: kyverno
+    chartVersion: 2.11.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

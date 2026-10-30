@@ -1,0 +1,32 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: orders-payments-delay
+  namespace: sentinelops
+spec:
+  action:
+    delay:
+      latency: "500ms"
+      correlation: "100"
+  mode: "all"
+  selector:
+    namespaces:
+      - sentinelops
+    labelSelectors:
+      app: orders
+---
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: orders-pod-kill
+  namespace: sentinelops
+spec:
+  action:
+    kill:
+      selector:
+        namespaces:
+          - sentinelops
+        labelSelectors:
+          app: orders
+  mode: all
+  duration: 30s

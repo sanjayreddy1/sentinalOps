@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: sentinelops
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: catalog
+          image: ghcr.io/sanjuportfolio/sentinelops-app/services/catalog:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ERROR_RATE
+              value: "0" # set to e.g. 0.3 to inject errors for rollback demos
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

@@ -1,0 +1,44 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: sentinelops-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: sentinelops.rules
+      rules:
+        - alert: HighErrorRate
+          expr: sum(rate(orders_requests_total{status!="200"}[5m])) / sum(rate(orders_requests_total[5m])) > 0.01
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High error rate on orders"
+            runbook: "auto-remediate via SentinelOps console webhook (rollback orders)"
+        - alert: HighLatency
+          expr: histogram_quantile(0.95, sum(rate(orders_request_latency_seconds_bucket[5m])) by (le)) > 0.5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "p95 latency above 500ms"
+        - alert: PodCrashLooping
+          expr: kube_pod_container_restarts_total > 3
+          for: 10m
+          labels:
+            severity: warning
+        - alert: NodeNotReady
+          expr: kube_node_status_ready{ready="0"}
+          for: 1m
+          labels:
+            severity: critical
+        - alert: ResourceExhausted
+          expr: kube_pod_container_memory_working_set_bytes / on (container) kube_pod_container_limits_bytes > 0.9
+          for: 5m
+          labels:
+            severity: warning
+        - alert: CertificateExpiring
+          expr: cert_manager_certificate_expiration_timestamp_seconds - time() < 604800
+          for: 1d
+          labels:
+            severity: info

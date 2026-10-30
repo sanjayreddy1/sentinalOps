@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio
+  namespace: istio-system
+spec:
+  project: default
+  source:
+    repoURL: https://istio.github.io/istio-helm-chart
+    chart: istio
+    chartVersion: 1.26.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

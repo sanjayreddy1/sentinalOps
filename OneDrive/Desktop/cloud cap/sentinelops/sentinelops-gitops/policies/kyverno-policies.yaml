@@ -1,0 +1,121 @@
+apiVersion: kyverno.io/v1beta1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signature
+spec:
+  background: true
+  rules:
+    - name: verify-sigstore-signature
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      verifyImages:
+        - imageReferences:
+            - ghcr.io/sanjuportfolio/*
+          attestors:
+            - entries:
+                - keys:
+                    - <signing-key-fingerprint>
+          required: true
+---
+apiVersion: kyverno.io/v1beta1
+kind: ClusterPolicy
+metadata:
+  name: require-requests-and-limits
+spec:
+  background: true
+  rules:
+    - name: check-resources
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        resource:
+          limits:
+            cpu: ["100m", "*"]
+            memory: ["128Mi", "*"]
+          requests:
+            cpu: ["10m", "*"]
+            memory: ["32Mi", "*"]
+---
+apiVersion: kyverno.io/v1beta1
+kind: ClusterPolicy
+metadata:
+  name: deny-privileged-and-root-containers
+spec:
+  background: true
+  rules:
+    - name: require-non-root-and-unprivileged
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        podSecurityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+        containers:
+          securityContext:
+            privileged: false
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+---
+apiVersion: kyverno.io/v1beta1
+kind: ClusterPolicy
+metadata:
+  name: restrict-image-registry
+spec:
+  background: true
+  rules:
+    - name: only-allow-github-container-registry
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        pattern:
+          - pattern: "^ghcr\\.io/sanjuportfolio/.+:sha-[a-f0-9]{7,40}$"
+            message: "Only immutable SHA-tagged images from ghcr.io/sanjuportfolio are allowed (got: {{request.object}})"
+---
+apiVersion: kyverno.io/v1beta1
+kind: ClusterPolicy
+metadata:
+  name: default-deny-network-policy
+spec:
+  background: true
+  rules:
+    - name: deny-all-ingress
+      match:
+        any:
+          - resources:
+              kinds: ["Namespace"]
+      policy:
+        - name: default-deny-ingress
+          podSelector: {}
+          netPolicyPeer:
+            - podSelector: {}
+              namespaceSelector: {}
+          netPolicyIngress:
+            - {}
+---
+apiVersion: kyverno.io/v1beta1
+kind: ClusterPolicy
+metadata:
+  name: require-namespace-network-policy
+spec:
+  background: true
+  rules:
+    - name: deny-ingress-without-egress-peer
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        networkPolicy:
+          netPolicyPeer:
+            - podSelector: {}
+              namespaceSelector: {}
+          netPolicyIngress:
+            - {}
